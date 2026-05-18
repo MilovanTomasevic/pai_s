@@ -1,0 +1,201 @@
+/* =========================================================
+   PathlyAI Navbar - hover fixes + no underline on ACTIVE
+   - Hover text: cyan/glow (instead of green)
+   - Active link: cloud only, NO underline
+   - Active link: thin cyan/blue stroke around letters
+   - Hard override: kill any theme green (higher specificity + !important)
+   ========================================================= */
+
+:root{
+  --pathly-navy:#050B1A;
+  --pathly-deep:#071A33;
+  --pathly-blue:#0B58C7;
+  --pathly-cyan:#18D0FF;
+  --pathly-ice:#E9FBFF;
+  --pathly-slate:#B9C7D9;
+}
+
+/* 1) Base */
+.navbar-landing .navbar-nav .nav-link{
+  color: var(--pathly-slate) !important;
+  position: relative;
+  transition: color .18s ease, text-shadow .18s ease, filter .18s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---------------------------------------------------------
+   2) ACTIVE hard override (kills theme active green)
+   - covers: .active, .show, aria-current="page" (Bootstrap)
+   - uses only root palette colors
+   --------------------------------------------------------- */
+#navbar.navbar-landing .navbar-nav .nav-link.active,
+#navbar.navbar-landing .navbar-nav .nav-link.show,
+#navbar.navbar-landing .navbar-nav .show > .nav-link,
+#navbar.navbar-landing .navbar-nav .nav-link[aria-current="page"],
+.navbar-landing .navbar-nav .nav-link.active,
+.navbar-landing .navbar-nav .nav-link.show,
+.navbar-landing .navbar-nav .show > .nav-link,
+.navbar-landing .navbar-nav .nav-link[aria-current="page"]{
+  /* force text to ice, never green */
+  color: var(--pathly-ice) !important;
+
+  /* cyan/blue glow, still subtle */
+  text-shadow:
+    0 0 10px rgba(233,251,255,.14),
+    0 0 18px rgba(24,208,255,.18),
+    0 0 28px rgba(11,88,199,.14);
+
+  /* thin outline around letters (primary effect you want) */
+  -webkit-text-stroke: .55px rgba(24,208,255,.36);
+
+  /* fallback outline-like feel */
+  filter:
+    drop-shadow(0 0 1px rgba(24,208,255,.65))
+    drop-shadow(0 0 7px rgba(24,208,255,.22))
+    drop-shadow(0 0 9px rgba(11,88,199,.16));
+}
+
+/* Keep ACTIVE ice even on hover/focus (never switch to theme colors) */
+#navbar.navbar-landing .navbar-nav .nav-link.active:hover,
+#navbar.navbar-landing .navbar-nav .nav-link.active:focus,
+#navbar.navbar-landing .navbar-nav .nav-link.active:focus-visible,
+.navbar-landing .navbar-nav .nav-link.active:hover,
+.navbar-landing .navbar-nav .nav-link.active:focus,
+.navbar-landing .navbar-nav .nav-link.active:focus-visible{
+  color: var(--pathly-ice) !important;
+}
+
+/* Cloud behind ACTIVE */
+#navbar.navbar-landing .navbar-nav .nav-link.active::before,
+#navbar.navbar-landing .navbar-nav .nav-link[aria-current="page"]::before,
+.navbar-landing .navbar-nav .nav-link.active::before,
+.navbar-landing .navbar-nav .nav-link[aria-current="page"]::before{
+  content:"";
+  position:absolute;
+  left:-12px; right:-12px;
+  top:50%;
+  height: 2.05em;
+  transform: translateY(-55%);
+  border-radius: 999px;
+
+  background: radial-gradient(circle at 50% 45%,
+            rgba(7,26,51,.18) 0%,
+            rgba(11,88,199,.20) 22%,
+            rgba(24,208,255,.18) 44%,
+            rgba(10,46,94,.14) 62%,
+            rgba(7,26,51,0) 82%);
+
+  filter: blur(6px);
+  box-shadow:
+    0 0 18px rgba(11,88,199,.14),
+    0 0 30px rgba(24,208,255,.10);
+
+  z-index:-1;
+  pointer-events:none;
+}
+
+/* Underline element (default hidden) */
+.navbar-landing .navbar-nav .nav-link::after{
+  content:"";
+  position:absolute;
+  left:12%;
+  right:12%;
+  bottom:-6px;
+  height:2px;
+  border-radius:999px;
+  background: linear-gradient(90deg, rgba(24,208,255,0) 0%,
+                                   rgba(24,208,255,.95) 35%,
+                                   rgba(11,88,199,.9) 65%,
+                                   rgba(11,88,199,0) 100%);
+  opacity:0;
+  transform: scaleX(.65);
+  transition: opacity .18s ease, transform .18s ease;
+  box-shadow: 0 0 14px rgba(24,208,255,.28), 0 0 26px rgba(11,88,199,.18);
+  pointer-events:none;
+}
+
+/* 3) HOVER: cyan + glow */
+.navbar-landing .navbar-nav .nav-link:hover,
+.navbar-landing .navbar-nav .nav-link:focus,
+.navbar-landing .navbar-nav .nav-link:focus-visible{
+  color: var(--pathly-cyan) !important;
+  text-shadow:
+    0 0 10px rgba(24,208,255,.30),
+    0 0 22px rgba(24,208,255,.22),
+    0 0 36px rgba(11,88,199,.18);
+}
+
+/* Show underline ONLY on hover/focus (NOT on active) */
+.navbar-landing .navbar-nav .nav-link:hover::after,
+.navbar-landing .navbar-nav .nav-link:focus::after,
+.navbar-landing .navbar-nav .nav-link:focus-visible::after{
+  opacity:1;
+  transform: scaleX(1);
+}
+
+/* 4) Kill underline on ACTIVE explicitly */
+#navbar.navbar-landing .navbar-nav .nav-link.active::after,
+#navbar.navbar-landing .navbar-nav .nav-link[aria-current="page"]::after,
+.navbar-landing .navbar-nav .nav-link.active::after,
+.navbar-landing .navbar-nav .nav-link[aria-current="page"]::after{
+  opacity:0 !important;
+  transform: scaleX(.65) !important;
+}
+
+/* 5) Override visited states too */
+.navbar-landing .navbar-nav .nav-link:visited{
+  color: var(--pathly-slate) !important;
+}
+#navbar.navbar-landing .navbar-nav .nav-link.active:visited,
+#navbar.navbar-landing .navbar-nav .nav-link[aria-current="page"]:visited,
+.navbar-landing .navbar-nav .nav-link.active:visited,
+.navbar-landing .navbar-nav .nav-link[aria-current="page"]:visited{
+  color: var(--pathly-ice) !important;
+}
+
+/* 6) Extra safety: if theme applies green via generic a:hover, this still wins */
+#navbar .navbar-nav .nav-link:hover,
+#navbar .navbar-nav .nav-link:focus{
+  color: var(--pathly-cyan) !important;
+}
+
+
+
+/* =========================================================
+   PathlyAI Avatar ring (no theme green icon-effect)
+   - Keeps subtle cyan/blue ring + soft glow
+   - Removes icon-effect green bubble (pseudo elements)
+   ========================================================= */
+
+/* Suptilan transparentni krug (ring) za avatar-title */
+.avatar-title.bg-transparent.rounded-circle{
+  border: 1px solid rgba(24,208,255,.22);          /* cyan ring */
+  box-shadow:
+    inset 0 0 0 1px rgba(233,251,255,.10),         /* inner ice */
+    0 0 10px rgba(24,208,255,.10),                 /* soft cyan glow */
+    0 0 14px rgba(11,88,199,.08);                  /* soft blue glow */
+  background: rgba(24,208,255,.03);                /* skoro transparentno */
+}
+
+/* Pregazi text-secondary (ako vuce sivu iz teme) */
+.avatar-title.bg-transparent.text-secondary.rounded-circle{
+  color: rgba(233,251,255,.78) !important;         /* ice tint */
+}
+
+/* Ukloni zeleni "icon-effect" krugic (najcesce je ::before/::after) */
+.icon-effect::before,
+.icon-effect::after,
+.avatar-xs.icon-effect::before,
+.avatar-xs.icon-effect::after{
+  content: none !important;
+  display: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+/* Extra safety: ako template boji icon-effect preko varijabli */
+.icon-effect{
+  --bs-success: var(--pathly-cyan);
+  --bs-green: var(--pathly-cyan);
+}
